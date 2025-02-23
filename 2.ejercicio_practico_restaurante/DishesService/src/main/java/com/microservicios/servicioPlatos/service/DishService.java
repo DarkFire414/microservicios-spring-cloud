@@ -17,13 +17,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DishService implements IDishService {
 
     private static final Logger logger = LoggerFactory.getLogger(DishService.class);
 
-    private static final String ingredientServiceURL = "http://localhost:9002/ingredients/get";
+    private static final String ingredientServiceURL = "http://localhost:9002/ingredients/get?dishName=";
 
     @Autowired
     private IDishRepository iDishRepository;
@@ -51,13 +52,10 @@ public class DishService implements IDishService {
         // Obtener los ingredientes asociados al nombre del plato
         // desde el servicio de ingredientes
         // Construir la URL con el parámetro de consulta
-        String url = UriComponentsBuilder.fromHttpUrl(ingredientServiceURL)
-                .queryParam("dishName", dish.getName())
-                .toUriString();
-
+        String url = ingredientServiceURL + dish.getName();
         logger.info("Service url = {}", url);
 
-        List<IngredientDTO> response = Arrays.asList(apiConsumption.getForObject(url, IngredientDTO[].class));
+        List<IngredientDTO> response = Arrays.asList(Objects.requireNonNull(apiConsumption.getForObject(url, IngredientDTO[].class)));
 
         logger.info("Service response = {}", response);
 
