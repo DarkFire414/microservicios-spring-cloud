@@ -42,6 +42,12 @@ public class TurnController {
       return "Turn created";
     }
 
+    @PostMapping("/createWithFeign")
+    public String createTurnFeign(@RequestBody TurnDTO turnDTO) {
+        iturns.saveTurnFeign(turnDTO);
+        return "Turn created using Feign";
+    }
+
     // Put
     @PutMapping("/edit/{turnId}")
     public Turn editTurn(@PathVariable Long turnId, @RequestBody Turn turn){

@@ -1,7 +1,9 @@
 package com.spring.turns.service;
 
+import com.spring.turns.dto.TurnDTO;
 import com.spring.turns.model.Patient;
 import com.spring.turns.model.Turn;
+import com.spring.turns.repository.IPatientsClient;
 import com.spring.turns.repository.ITurnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class TurnService implements ITurnService{
     @Autowired
     private RestTemplate apiConsumption;
 
+    @Autowired
+    private IPatientsClient patientsClient;
+
     @Override
     public void saveTurn(LocalDate date, String treatment, String dniPatient) {
         // Buscar el paciente en la API pacientes
@@ -32,6 +37,21 @@ public class TurnService implements ITurnService{
         Turn newTurn = new Turn();
         newTurn.setDate(date);
         newTurn.setTreatment(treatment);
+        newTurn.setPatientName(completeName);
+
+        iturnr.save(newTurn);
+    }
+
+    @Override
+    public void saveTurnFeign(TurnDTO turnDTO) {
+        Patient patient = patientsClient.getPatientInfo(turnDTO.getDniPatient());
+
+        // Obtener el nombre completo del paciente
+        String completeName = patient.getName() + " " + patient.getLastName();
+
+        Turn newTurn = new Turn();
+        newTurn.setDate(turnDTO.getDate());
+        newTurn.setTreatment(turnDTO.getTreatment());
         newTurn.setPatientName(completeName);
 
         iturnr.save(newTurn);
@@ -62,4 +82,5 @@ public class TurnService implements ITurnService{
     public void deleteTurn(Long turnId) {
         iturnr.deleteById(turnId);
     }
+
 }
