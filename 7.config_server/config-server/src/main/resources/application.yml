@@ -10,6 +10,6 @@ spring:
       server:
         git:
           uri: https://github.com/DarkFire414/microservicios-spring-cloud.git
-          searchPaths: 7.config-server/config-data
+          searchPaths: config-data
           username: ${GIT_USER}
           password: ${GIT_PASSWORD}
