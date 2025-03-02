@@ -1,5 +1,6 @@
 package com.spring.turns.service;
 
+import com.spring.turns.dto.TurnDTO;
 import com.spring.turns.model.Turn;
 
 import java.time.LocalDate;
@@ -17,4 +18,6 @@ public interface ITurnService {
     public void editTurn(Long turnId, Turn turn);
     // Delete
     public void deleteTurn(Long turnId);
+
+    void saveTurnFeign(TurnDTO turnDTO);
 }
